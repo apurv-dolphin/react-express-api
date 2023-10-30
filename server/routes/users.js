@@ -4,7 +4,7 @@ const router = express.Router();
 const User = require("../config"); // Import Firestore db and User collection
 
 // Get all users
-router.get("/users", async (req, res) => {
+router.get("/api/users", async (req, res) => {
   try {
     const snapshot = await User.get();
     const list = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
@@ -15,7 +15,7 @@ router.get("/users", async (req, res) => {
 });
 
 // Create a new user
-router.post("/users", async (req, res) => {
+router.post("/api/users", async (req, res) => {
   try {
     const data = req.body;
     await User.add(data);
@@ -26,7 +26,7 @@ router.post("/users", async (req, res) => {
 });
 
 // Update user by ID
-router.put("/users/:id", async (req, res) => {
+router.put("/api/users/:id", async (req, res) => {
   try {
     const id = req.params.id;
     const data = req.body;
@@ -38,11 +38,19 @@ router.put("/users/:id", async (req, res) => {
 });
 
 // Delete user by ID
-router.delete("/users/:id", async (req, res) => {
+router.delete("/api/users/:id", async (req, res) => {
   try {
     const id = req.params.id;
-    await User.doc(id).delete();
-    res.json({ msg: "User Deleted Successfully." });
+    const userDoc = await User.doc(id).get();
+
+    if (userDoc.exists) {
+      // Document exists, proceed with deletion
+      await User.doc(id).delete();
+      res.json({ msg: "User Deleted Successfully." });
+    } else {
+      // Document doesn't exist, respond with an error
+      res.status(404).json({ error: "User not found" });
+    }
   } catch (error) {
     res.status(500).json({ error: "Error deleting user" });
   }

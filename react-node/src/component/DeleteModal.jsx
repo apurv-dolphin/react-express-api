@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 export default function DeleteModal(props) {
   const deleteUser = async () => {
     try {
-      const response = await GlobalApi.delete(`/users/${props?.userdata?.id}`);
+      const response = await GlobalApi.delete(`/api/users/${props?.userdata?.id}`);
       toast.success(response.data.msg, {
         position: "top-right",
         autoClose: 5000,
@@ -21,7 +21,17 @@ export default function DeleteModal(props) {
       props.getapicall();
       props.onHide();
     } catch (error) {
-      console.error("Error:", error);
+      toast.error(error.response.data.error, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+      props.onHide();
     }
   };
   return (

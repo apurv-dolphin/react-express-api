@@ -22,7 +22,10 @@ export default function UseInformation(props) {
   };
   const updateUserData = async () => {
     try {
-      const response = await GlobalApi.put(`/users/${editData?.id}`, editData);
+      const response = await GlobalApi.put(
+        `/api/users/${editData?.id}`,
+        editData
+      );
       toast.success(response.data.msg, {
         position: "top-right",
         autoClose: 5000,
@@ -42,7 +45,7 @@ export default function UseInformation(props) {
 
   const createUser = async () => {
     try {
-      const response = await GlobalApi.post("/users", editData);
+      const response = await GlobalApi.post("/api/users", editData);
       toast.success(response.data.msg, {
         position: "top-right",
         autoClose: 5000,

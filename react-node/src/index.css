@@ -9,3 +9,29 @@
   display: flex;
   justify-content: end;
 }
+
+.button-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  height: 90vh;
+  margin: 0;
+}
+
+.button-container a {
+  display: inline-block;
+  padding: 10px 20px;
+  margin: 10px;
+  background-color: #0074d9; /* Button background color */
+  color: #fff; /* Text color */
+  text-decoration: none;
+  border: 1px solid #0074d9; /* Button border color */
+  border-radius: 5px;
+  text-align: center;
+  transition: background-color 0.3s ease;
+}
+
+.button-container a:hover {
+  background-color: #0056b3; /* Button background color on hover */
+}
