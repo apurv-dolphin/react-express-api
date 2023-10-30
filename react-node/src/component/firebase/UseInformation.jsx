@@ -3,10 +3,13 @@ import { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
-import GlobalApi from "../service/GlobalBaseUrl";
 import { toast } from "react-toastify";
+import { UseUserData } from "../../contextAPI/firebase/firebaseContextAPI";
+import editUser from "../../service/firebaseAPI/editUser";
+import createUserData from "../../service/firebaseAPI/createUser";
 
 export default function UseInformation(props) {
+  const { getUseData } = UseUserData();
   const [editData, setEditData] = useState({
     id: "",
     firstname: "",
@@ -22,13 +25,10 @@ export default function UseInformation(props) {
   };
   const updateUserData = async () => {
     try {
-      const response = await GlobalApi.put(
-        `/api/users/${editData?.id}`,
-        editData
-      );
-      toast.success(response.data.msg, {
+      const response = await editUser(editData?.id, editData);
+      toast.success(response, {
         position: "top-right",
-        autoClose: 5000,
+        autoClose: 3000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -36,7 +36,7 @@ export default function UseInformation(props) {
         progress: undefined,
         theme: "light",
       });
-      props.getapicall();
+      getUseData();
       props.onHide();
     } catch (error) {
       console.log(error);
@@ -45,10 +45,10 @@ export default function UseInformation(props) {
 
   const createUser = async () => {
     try {
-      const response = await GlobalApi.post("/api/users", editData);
-      toast.success(response.data.msg, {
+      const response = await createUserData(editData);
+      toast.success(response, {
         position: "top-right",
-        autoClose: 5000,
+        autoClose: 3000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -56,7 +56,7 @@ export default function UseInformation(props) {
         progress: undefined,
         theme: "light",
       });
-      props.getapicall();
+      getUseData();
       props.onHide();
     } catch (error) {
       console.log(error);

@@ -1,18 +1,21 @@
 /* eslint-disable react/prop-types */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Table from "react-bootstrap/Table";
-import UseInformation from "./UseInformation";
 import { BiEdit } from "react-icons/bi";
 import { RiDeleteBin2Fill } from "react-icons/ri";
-import DeleteModal from "./DeleteModal";
 import Button from "react-bootstrap/Button";
+import { UseMongoUserData } from "../../contextAPI/mongo/mongoContextAPI";
+import EmployeeInformation from "./EmployeeInformation";
+import EmployeeDeleteModal from "./EmployeeDeleteModal";
+import { useNavigate } from "react-router-dom";
 
-export default function UserTable(props) {
-  const { userdata, getapicall } = props;
+export default function EmployeeTable() {
+  const { userMongoData, getUseMongoData } = UseMongoUserData();
   const [show, setShow] = useState(false);
   const [deleteShowModal, setDeleteShowModal] = useState(false);
   const [deleteData, setDeleteData] = useState({});
   const [editData, setEditData] = useState({});
+  const navigate = useNavigate();
 
   const handleClose = () => setShow(false);
   const handleShow = (data) => {
@@ -25,9 +28,22 @@ export default function UserTable(props) {
     setDeleteData(data);
     setDeleteShowModal(true);
   };
+
+  const prevTab = () => {
+    navigate("/");
+  };
+
+  useEffect(() => {
+    getUseMongoData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <>
       <div className="btn-container mb-3">
+        <Button variant="primary" onClick={prevTab}>
+          Back
+        </Button>
+        <h2>Employee Table</h2>
         <Button variant="primary" onClick={() => handleShow(null)}>
           Create
         </Button>
@@ -38,19 +54,19 @@ export default function UserTable(props) {
             <th>#</th>
             <th>First Name</th>
             <th>Last Name</th>
-            <th>City</th>
+            <th>Technology</th>
             <th>Email</th>
             <th>Phone</th>
             <th>Action</th>
           </tr>
         </thead>
         <tbody>
-          {userdata?.map((newdata, index) => (
+          {userMongoData?.map((newdata, index) => (
             <tr key={index}>
               <td>{index + 1}</td>
               <td>{newdata?.firstname}</td>
               <td>{newdata?.lastname}</td>
-              <td>{newdata?.city}</td>
+              <td>{newdata?.technology}</td>
               <td>{newdata?.email}</td>
               <td>{newdata?.phone}</td>
               <td>
@@ -64,19 +80,17 @@ export default function UserTable(props) {
         </tbody>
       </Table>
       {show && (
-        <UseInformation
+        <EmployeeInformation
           show={show}
           onHide={handleClose}
           userdata={editData}
-          getapicall={getapicall}
         />
       )}
       {deleteShowModal && (
-        <DeleteModal
+        <EmployeeDeleteModal
           show={deleteShowModal}
           onHide={handleDeleteClose}
           userdata={deleteData}
-          getapicall={getapicall}
         />
       )}
     </>

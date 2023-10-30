@@ -9,9 +9,11 @@ require("dotenv").config();
 
 const DB = process.env.DATABASEURL;
 
+const PORT = process.env.PORT;
+
 mongoose
-  .connect(DB,{
-    dbName: "Apurv-CRUD"
+  .connect(DB, {
+    dbName: "Apurv-CRUD",
   })
   .then(() => {
     console.log("connection successfully party karo.");
@@ -25,4 +27,4 @@ app.use(cors());
 app.use("/", usersRouter);
 app.use("/userinfo", mongoUSerRouter);
 
-app.listen(9000, () => console.log("Up & Running on port 9000"));
+app.listen(PORT, () => console.log(`Up & Running on port ${PORT}`));

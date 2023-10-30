@@ -1,6 +1,10 @@
+import EmployeeTable from "../component/mongo/EmployeeTable";
+import { UserMongoDataProvider } from "../contextAPI/mongo/mongoContextAPI";
 
 export default function Mongo() {
   return (
-    <div>Mongo</div>
-  )
+    <UserMongoDataProvider>
+      <EmployeeTable />
+    </UserMongoDataProvider>
+  );
 }
