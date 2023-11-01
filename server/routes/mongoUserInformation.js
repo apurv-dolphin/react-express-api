@@ -1,9 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const User = require("../Modal/userModal"); // Import your Mongoose model
+const verifyToken = require("../Middleware/authentication");
 
 // Get all user information
-router.get("/", async (req, res) => {
+router.get("/", verifyToken, async (req, res) => {
   try {
     const users = await User.find();
     res.json({
@@ -17,7 +18,7 @@ router.get("/", async (req, res) => {
 });
 
 // Create a new user
-router.post("/", async (req, res) => {
+router.post("/", verifyToken, async (req, res) => {
   const user = new User({
     firstname: req.body.firstname,
     lastname: req.body.lastname,
@@ -39,7 +40,7 @@ router.post("/", async (req, res) => {
 });
 
 // Update a user's information
-router.put("/:id", async (req, res) => {
+router.put("/:id", verifyToken, async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
 
@@ -67,7 +68,7 @@ router.put("/:id", async (req, res) => {
 });
 
 // Delete a user
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", verifyToken, async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
 

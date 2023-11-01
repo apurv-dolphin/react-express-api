@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function EmployeeTable() {
   const { userMongoData, getUseMongoData } = UseMongoUserData();
+  const [employeeName, setEmployeeName] = useState("");
   const [show, setShow] = useState(false);
   const [deleteShowModal, setDeleteShowModal] = useState(false);
   const [deleteData, setDeleteData] = useState({});
@@ -34,16 +35,24 @@ export default function EmployeeTable() {
   };
 
   useEffect(() => {
+    const Name = JSON.parse(localStorage.getItem("token"));
+    setEmployeeName(Name?.employee);
     getUseMongoData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <>
-      <div className="btn-container mb-3">
+      <div className="text-center mb-3">
+        <h1>Welcome {employeeName}</h1>
+      </div>
+      <hr />
+      <div className="btn-container mb-3 mt-1">
         <Button variant="primary" onClick={prevTab}>
           Back
         </Button>
-        <h2>Employee Table</h2>
+        <h4>
+          <b>Employee Table</b>
+        </h4>
         <Button variant="primary" onClick={() => handleShow(null)}>
           Create
         </Button>
