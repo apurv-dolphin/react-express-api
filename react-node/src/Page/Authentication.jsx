@@ -60,7 +60,7 @@ export default function Authentication() {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
-      navigate("/");
+      navigate("/mongo");
     }
   }, [navigate]);
 
