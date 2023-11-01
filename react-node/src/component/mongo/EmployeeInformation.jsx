@@ -7,8 +7,10 @@ import { toast } from "react-toastify";
 import { UseMongoUserData } from "../../contextAPI/mongo/mongoContextAPI";
 import editMongoUser from "../../service/mongo/editMongoUser";
 import createMongoUser from "../../service/mongo/createMongoUser";
+import { useNavigate } from "react-router-dom";
 
 export default function EmployeeInformation(props) {
+  const navigate = useNavigate();
   const { getUseMongoData } = UseMongoUserData();
   const [editData, setEditData] = useState({
     _id: "",
@@ -39,7 +41,20 @@ export default function EmployeeInformation(props) {
       getUseMongoData();
       props.onHide();
     } catch (error) {
-      console.log(error);
+      console.log("error:", error);
+      if (error?.response?.status === 403) {
+        navigate("/");
+        toast.error("You are unauthorized", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      }
     }
   };
 
@@ -60,6 +75,19 @@ export default function EmployeeInformation(props) {
       props.onHide();
     } catch (error) {
       console.log(error);
+      if (error?.response?.status === 403) {
+        navigate("/");
+        toast.error("You are unauthorized", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      }
     }
   };
 

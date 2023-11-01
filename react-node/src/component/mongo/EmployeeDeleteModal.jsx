@@ -4,8 +4,10 @@ import Modal from "react-bootstrap/Modal";
 import { toast } from "react-toastify";
 import deleteMongoUser from "../../service/mongo/deleteMongoUser";
 import { UseMongoUserData } from "../../contextAPI/mongo/mongoContextAPI";
+import { useNavigate } from "react-router-dom";
 
 export default function EmployeeDeleteModal(props) {
+  const navigate = useNavigate();
   const { getUseMongoData } = UseMongoUserData();
   const deleteUser = async () => {
     try {
@@ -24,17 +26,31 @@ export default function EmployeeDeleteModal(props) {
       props.onHide();
     } catch (error) {
       console.log(error);
-      toast.error(error?.response?.data?.error, {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
-      props.onHide();
+      if (error?.response?.status === 403) {
+        navigate("/");
+        toast.error("You are unauthorized", {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      } else {
+        toast.error(error?.response?.data?.error, {
+          position: "top-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+        props.onHide();
+      }
     }
   };
   return (

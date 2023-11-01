@@ -6,6 +6,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./Page/Home";
 import Mongo from "./Page/Mongo";
 import Firebase from "./Page/Firebase";
+import Authentication from "./Page/Authentication";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
       <ToastContainer />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/auth" element={<Authentication />} />
         <Route path="/firebase" element={<Firebase />} />
         <Route path="/mongo" element={<Mongo />} />
       </Routes>
