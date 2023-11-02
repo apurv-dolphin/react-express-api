@@ -1,3 +1,7 @@
+body {
+  font-family: Georgia, serif;
+}
+
 .action-btn {
   display: flex;
   justify-content: space-around;
@@ -34,4 +38,8 @@
 
 .button-container a:hover {
   background-color: #0056b3; /* Button background color on hover */
+}
+
+.m-ak {
+  overflow-x: auto;
 }

@@ -35,7 +35,7 @@ export default function EmployeeTable() {
   };
 
   useEffect(() => {
-    const Name = JSON.parse(localStorage.getItem("token"));
+    const Name = JSON.parse(sessionStorage.getItem("token"));
     setEmployeeName(Name?.employee);
     getUseMongoData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -57,37 +57,41 @@ export default function EmployeeTable() {
           Create
         </Button>
       </div>
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Technology</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {userMongoData?.map((newdata, index) => (
-            <tr key={index}>
-              <td>{index + 1}</td>
-              <td>{newdata?.firstname}</td>
-              <td>{newdata?.lastname}</td>
-              <td>{newdata?.technology}</td>
-              <td>{newdata?.email}</td>
-              <td>{newdata?.phone}</td>
-              <td>
-                <span className="action-btn">
-                  <BiEdit onClick={() => handleShow(newdata)} />
-                  <RiDeleteBin2Fill onClick={() => handleDeleteShow(newdata)} />
-                </span>
-              </td>
+      <div className="m-ak">
+        <Table striped bordered hover>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th>Technology</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Action</th>
             </tr>
-          ))}
-        </tbody>
-      </Table>
+          </thead>
+          <tbody>
+            {userMongoData?.map((newdata, index) => (
+              <tr key={index}>
+                <td>{index + 1}</td>
+                <td>{newdata?.firstname}</td>
+                <td>{newdata?.lastname}</td>
+                <td>{newdata?.technology}</td>
+                <td>{newdata?.email}</td>
+                <td>{newdata?.phone}</td>
+                <td>
+                  <span className="action-btn">
+                    <BiEdit onClick={() => handleShow(newdata)} />
+                    <RiDeleteBin2Fill
+                      onClick={() => handleDeleteShow(newdata)}
+                    />
+                  </span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      </div>
       {show && (
         <EmployeeInformation
           show={show}

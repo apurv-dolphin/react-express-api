@@ -48,37 +48,41 @@ export default function UserTable() {
           Create
         </Button>
       </div>
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>City</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {userData?.map((newdata, index) => (
-            <tr key={index}>
-              <td>{index + 1}</td>
-              <td>{newdata?.firstname}</td>
-              <td>{newdata?.lastname}</td>
-              <td>{newdata?.city}</td>
-              <td>{newdata?.email}</td>
-              <td>{newdata?.phone}</td>
-              <td>
-                <span className="action-btn">
-                  <BiEdit onClick={() => handleShow(newdata)} />
-                  <RiDeleteBin2Fill onClick={() => handleDeleteShow(newdata)} />
-                </span>
-              </td>
+      <div className="m-ak">
+        <Table striped bordered hover>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th>City</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Action</th>
             </tr>
-          ))}
-        </tbody>
-      </Table>
+          </thead>
+          <tbody>
+            {userData?.map((newdata, index) => (
+              <tr key={index}>
+                <td>{index + 1}</td>
+                <td>{newdata?.firstname}</td>
+                <td>{newdata?.lastname}</td>
+                <td>{newdata?.city}</td>
+                <td>{newdata?.email}</td>
+                <td>{newdata?.phone}</td>
+                <td>
+                  <span className="action-btn">
+                    <BiEdit onClick={() => handleShow(newdata)} />
+                    <RiDeleteBin2Fill
+                      onClick={() => handleDeleteShow(newdata)}
+                    />
+                  </span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      </div>
       {show && (
         <UseInformation show={show} onHide={handleClose} userdata={editData} />
       )}

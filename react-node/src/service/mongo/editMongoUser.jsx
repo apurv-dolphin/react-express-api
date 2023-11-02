@@ -1,7 +1,7 @@
 import GlobalApi from "../GlobalBaseUrl";
 
 const editMongoUser = async (id, userdata) => {
-  const token = JSON.parse(localStorage.getItem("token"));
+  const token = JSON.parse(sessionStorage.getItem("token"));
   // Configure Axios to include the token in the request headers
   GlobalApi.defaults.headers.common["Authorization"] = token
     ? `Bearer ${token?.token}`

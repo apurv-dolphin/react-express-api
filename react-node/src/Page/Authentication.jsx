@@ -23,10 +23,10 @@ export default function Authentication() {
   };
 
   const handleTokenSubmit = () => {
-    localStorage.setItem("token", JSON.stringify(userName));
+    sessionStorage.setItem("token", JSON.stringify(userName));
 
     setTimeout(async () => {
-      const data = JSON.parse(localStorage.getItem("token"));
+      const data = JSON.parse(sessionStorage.getItem("token"));
       const token = { token: data?.token };
       const response = await GlobalApi.post("/authenticate", token);
       if (response?.status === 200) {
@@ -58,7 +58,7 @@ export default function Authentication() {
   };
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = sessionStorage.getItem("token");
     if (token) {
       navigate("/mongo");
     }
