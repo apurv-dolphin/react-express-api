@@ -1,5 +1,6 @@
 body {
   font-family: Georgia, serif;
+  background: whitesmoke;
 }
 
 .action-btn {
@@ -27,19 +28,41 @@ body {
   display: inline-block;
   padding: 10px 20px;
   margin: 10px;
-  background-color: #0074d9; /* Button background color */
-  color: #fff; /* Text color */
+  background-color: #0074d9;
+  color: #fff;
   text-decoration: none;
-  border: 1px solid #0074d9; /* Button border color */
+  border: 1px solid #0074d9;
   border-radius: 5px;
   text-align: center;
   transition: background-color 0.3s ease;
 }
 
 .button-container a:hover {
-  background-color: #0056b3; /* Button background color on hover */
+  background-color: #0056b3;
 }
 
-.m-ak {
+.mobile-scroll-view {
   overflow-x: auto;
+}
+
+.custom-loading {
+  height: 0;
+  width: 0;
+  padding: 15px;
+  border: 6px solid #ccc;
+  border-right-color: #888;
+  border-radius: 22px;
+  -webkit-animation: rotate 1s infinite linear;
+  /* left, top and position just for the demo! */
+  position: absolute;
+  left: 50%;
+  top: 50%;
+}
+
+@-webkit-keyframes rotate {
+  /* 100% keyframe for  clockwise. 
+     use 0% instead for anticlockwise */
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
 }

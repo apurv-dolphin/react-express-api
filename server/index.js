@@ -4,6 +4,7 @@ const puppeteer = require("puppeteer");
 const mongoose = require("mongoose");
 const usersRouter = require("./routes/users");
 const mongoUSerRouter = require("./routes/mongoUserInformation");
+const compression = require('compression');
 // const verifyToken = require("./Middleware/authentication");
 const app = express();
 
@@ -39,6 +40,7 @@ mongoose
 
 app.use(express.json());
 app.use(cors());
+app.use(compression());
 app.use("/", usersRouter);
 app.use("/userinfo", mongoUSerRouter);
 

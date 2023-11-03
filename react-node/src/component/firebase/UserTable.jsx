@@ -48,7 +48,7 @@ export default function UserTable() {
           Create
         </Button>
       </div>
-      <div className="m-ak">
+      <div className="mobile-scroll-view">
         <Table striped bordered hover>
           <thead>
             <tr>

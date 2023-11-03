@@ -7,7 +7,11 @@ const createMongoUser = async (userdata) => {
     ? `Bearer ${token?.token}`
     : "no token";
 
-  const response = await GlobalApi.post("/userinfo", userdata);
+  const response = await GlobalApi.post("/userinfo", userdata, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
   const data = response.data.message;
   return data;
 };

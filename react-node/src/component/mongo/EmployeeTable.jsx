@@ -8,6 +8,7 @@ import { UseMongoUserData } from "../../contextAPI/mongo/mongoContextAPI";
 import EmployeeInformation from "./EmployeeInformation";
 import EmployeeDeleteModal from "./EmployeeDeleteModal";
 import { useNavigate } from "react-router-dom";
+import ImageDisplay from "./ImageDisplay";
 
 export default function EmployeeTable() {
   const { userMongoData, getUseMongoData } = UseMongoUserData();
@@ -16,6 +17,7 @@ export default function EmployeeTable() {
   const [deleteShowModal, setDeleteShowModal] = useState(false);
   const [deleteData, setDeleteData] = useState({});
   const [editData, setEditData] = useState({});
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleClose = () => setShow(false);
@@ -40,6 +42,14 @@ export default function EmployeeTable() {
     getUseMongoData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (userMongoData.length === 0) {
+      setLoading(true);
+    } else {
+      setLoading(false);
+    }
+  }, [userMongoData.length]);
   return (
     <>
       <div className="text-center mb-3">
@@ -57,8 +67,8 @@ export default function EmployeeTable() {
           Create
         </Button>
       </div>
-      <div className="m-ak">
-        <Table striped bordered hover>
+      <div className="mobile-scroll-view">
+        <Table striped bordered hover style={{ position: "relative" }}>
           <thead>
             <tr>
               <th>#</th>
@@ -67,29 +77,43 @@ export default function EmployeeTable() {
               <th>Technology</th>
               <th>Email</th>
               <th>Phone</th>
+              <th>Profile</th>
               <th>Action</th>
             </tr>
           </thead>
-          <tbody>
-            {userMongoData?.map((newdata, index) => (
-              <tr key={index}>
-                <td>{index + 1}</td>
-                <td>{newdata?.firstname}</td>
-                <td>{newdata?.lastname}</td>
-                <td>{newdata?.technology}</td>
-                <td>{newdata?.email}</td>
-                <td>{newdata?.phone}</td>
-                <td>
-                  <span className="action-btn">
-                    <BiEdit onClick={() => handleShow(newdata)} />
-                    <RiDeleteBin2Fill
-                      onClick={() => handleDeleteShow(newdata)}
-                    />
-                  </span>
+          {loading ? (
+            <tbody>
+              <tr style={{ height: "100px" }}>
+                <td colSpan={8}>
+                  <div className="custom-loading"></div>
                 </td>
               </tr>
-            ))}
-          </tbody>
+            </tbody>
+          ) : (
+            <tbody>
+              {userMongoData?.map((newdata, index) => (
+                <tr key={index}>
+                  <td>{index + 1}</td>
+                  <td>{newdata?.firstname}</td>
+                  <td>{newdata?.lastname}</td>
+                  <td>{newdata?.technology}</td>
+                  <td>{newdata?.email}</td>
+                  <td>{newdata?.phone}</td>
+                  <td>
+                    <ImageDisplay bufferData={newdata?.photo} />
+                  </td>
+                  <td>
+                    <span className="action-btn">
+                      <BiEdit onClick={() => handleShow(newdata)} />
+                      <RiDeleteBin2Fill
+                        onClick={() => handleDeleteShow(newdata)}
+                      />
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          )}
         </Table>
       </div>
       {show && (
