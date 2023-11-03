@@ -6,7 +6,11 @@ const editMongoUser = async (id, userdata) => {
   GlobalApi.defaults.headers.common["Authorization"] = token
     ? `Bearer ${token?.token}`
     : "no token";
-  const response = await GlobalApi.put(`/userinfo/${id}`, userdata);
+  const response = await GlobalApi.put(`/userinfo/${id}`, userdata, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
   const data = response.data.message;
   return data;
 };

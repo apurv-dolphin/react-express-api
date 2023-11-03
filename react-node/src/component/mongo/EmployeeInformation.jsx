@@ -8,6 +8,7 @@ import { UseMongoUserData } from "../../contextAPI/mongo/mongoContextAPI";
 import editMongoUser from "../../service/mongo/editMongoUser";
 import createMongoUser from "../../service/mongo/createMongoUser";
 import { useNavigate } from "react-router-dom";
+import ImageDisplay from "./ImageDisplay";
 
 export default function EmployeeInformation(props) {
   const navigate = useNavigate();
@@ -19,15 +20,31 @@ export default function EmployeeInformation(props) {
     technology: "",
     email: "",
     phone: "",
+    photo: null,
   });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setEditData({ ...editData, [name]: value });
   };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    setEditData({
+      ...editData,
+      photo: file,
+    });
+  };
   const updateUserData = async () => {
+    const formDataToSend = new FormData();
+    formDataToSend.append("firstname", editData?.firstname);
+    formDataToSend.append("lastname", editData?.lastname);
+    formDataToSend.append("technology", editData?.technology);
+    formDataToSend.append("email", editData?.email);
+    formDataToSend.append("phone", editData?.phone);
+    formDataToSend.append("photo", editData?.photo);
     try {
-      const response = await editMongoUser(editData?._id, editData);
+      const response = await editMongoUser(editData?._id, formDataToSend);
       toast.success(response, {
         position: "top-right",
         autoClose: 3000,
@@ -59,8 +76,15 @@ export default function EmployeeInformation(props) {
   };
 
   const createUser = async () => {
+    const formDataToSend = new FormData();
+    formDataToSend.append("firstname", editData?.firstname);
+    formDataToSend.append("lastname", editData?.lastname);
+    formDataToSend.append("technology", editData?.technology);
+    formDataToSend.append("email", editData?.email);
+    formDataToSend.append("phone", editData?.phone);
+    formDataToSend.append("photo", editData?.photo);
     try {
-      const response = await createMongoUser(editData);
+      const response = await createMongoUser(formDataToSend);
       toast.success(response, {
         position: "top-right",
         autoClose: 3000,
@@ -99,6 +123,7 @@ export default function EmployeeInformation(props) {
       technology: props.userdata?.technology,
       email: props.userdata?.email,
       phone: props.userdata?.phone,
+      photo: props.userdata?.photo,
     });
   }, [props.userdata]);
   return (
@@ -114,6 +139,9 @@ export default function EmployeeInformation(props) {
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
+        <span style={{ display: "flex", justifyContent: "center" }}>
+          <ImageDisplay bufferData={editData?.photo} />
+        </span>
         <Form>
           <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
             <Form.Label>First Name</Form.Label>
@@ -168,6 +196,15 @@ export default function EmployeeInformation(props) {
               autoFocus
               value={editData?.phone || ""}
               onChange={handleChange}
+            />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="exampleForm.ControlInput6">
+            <Form.Label>Profile Image</Form.Label>
+            <Form.Control
+              type="file"
+              name="photo"
+              autoFocus
+              onChange={handleFileChange}
             />
           </Form.Group>
         </Form>

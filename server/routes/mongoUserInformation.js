@@ -1,7 +1,12 @@
 const express = require("express");
 const router = express.Router();
+const multer = require("multer");
 const User = require("../Modal/userModal"); // Import your Mongoose model
 const verifyToken = require("../Middleware/authentication");
+
+// Set up Multer for handling file uploads
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
 
 // Get all user information
 router.get("/", verifyToken, async (req, res) => {
@@ -18,13 +23,14 @@ router.get("/", verifyToken, async (req, res) => {
 });
 
 // Create a new user
-router.post("/", verifyToken, async (req, res) => {
+router.post("/", upload.single("photo"), verifyToken, async (req, res) => {
   const user = new User({
     firstname: req.body.firstname,
     lastname: req.body.lastname,
     technology: req.body.technology,
     email: req.body.email,
     phone: req.body.phone,
+    photo: req.file.buffer ? req.file.buffer : null,
   });
 
   try {
@@ -40,7 +46,7 @@ router.post("/", verifyToken, async (req, res) => {
 });
 
 // Update a user's information
-router.put("/:id", verifyToken, async (req, res) => {
+router.put("/:id", upload.single("photo"), verifyToken, async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
 
@@ -55,7 +61,9 @@ router.put("/:id", verifyToken, async (req, res) => {
     user.technology = req.body.technology || user.technology;
     user.email = req.body.email || user.email;
     user.phone = req.body.phone || user.phone;
-
+    if (req.file) {
+      user.photo = req.file.buffer;
+    }
     const updatedUser = await user.save();
     res.json({
       success: true,
