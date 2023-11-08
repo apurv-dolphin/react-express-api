@@ -18,8 +18,7 @@ const ImageDisplay = ({ bufferData }) => {
       <img
         src={imageUrl}
         alt="Buffer Image"
-        height={100}
-        width={100}
+        className="profile-img"
         style={{ objectFit: "contain" }}
       />
     );

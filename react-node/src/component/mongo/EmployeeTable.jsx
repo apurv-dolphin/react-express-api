@@ -11,13 +11,12 @@ import { useNavigate } from "react-router-dom";
 import ImageDisplay from "./ImageDisplay";
 
 export default function EmployeeTable() {
-  const { userMongoData, getUseMongoData } = UseMongoUserData();
+  const { userMongoData, getUseMongoData, loading } = UseMongoUserData();
   const [employeeName, setEmployeeName] = useState("");
   const [show, setShow] = useState(false);
   const [deleteShowModal, setDeleteShowModal] = useState(false);
   const [deleteData, setDeleteData] = useState({});
   const [editData, setEditData] = useState({});
-  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleClose = () => setShow(false);
@@ -43,13 +42,6 @@ export default function EmployeeTable() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    if (userMongoData.length === 0) {
-      setLoading(true);
-    } else {
-      setLoading(false);
-    }
-  }, [userMongoData.length]);
   return (
     <>
       <div className="text-center mb-3">

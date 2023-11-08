@@ -3,21 +3,25 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Home from "./Page/Home";
-import Mongo from "./Page/Mongo";
-import Firebase from "./Page/Firebase";
-import Authentication from "./Page/Authentication";
+import { Suspense, lazy } from "react";
+
+const Home = lazy(() => import("./Page/Home"));
+const Mongo = lazy(() => import("./Page/Mongo"));
+const Firebase = lazy(() => import("./Page/Firebase"));
+const Authentication = lazy(() => import("./Page/Authentication"));
 
 function App() {
   return (
     <BrowserRouter>
       <ToastContainer />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/auth" element={<Authentication />} />
-        <Route path="/firebase" element={<Firebase />} />
-        <Route path="/mongo" element={<Mongo />} />
-      </Routes>
+      <Suspense fallback={<div>Loading...</div>}>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/auth" element={<Authentication />} />
+          <Route path="/firebase" element={<Firebase />} />
+          <Route path="/mongo" element={<Mongo />} />
+        </Routes>
+      </Suspense>
     </BrowserRouter>
   );
 }

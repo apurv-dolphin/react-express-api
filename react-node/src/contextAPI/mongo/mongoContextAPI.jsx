@@ -8,12 +8,15 @@ const UserMongoDataContext = createContext();
 export const UserMongoDataProvider = ({ children }) => {
   const navigate = useNavigate();
   const [userMongoData, setUserMongoData] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const getUseMongoData = async () => {
+    setLoading(true);
     try {
       // get all employees data
       const response = await getMongoUser();
       setUserMongoData(response?.data);
+      setLoading(false);
     } catch (error) {
       console.error("Error:", error);
       navigate("/");
@@ -21,7 +24,9 @@ export const UserMongoDataProvider = ({ children }) => {
   };
 
   return (
-    <UserMongoDataContext.Provider value={{ userMongoData, getUseMongoData }}>
+    <UserMongoDataContext.Provider
+      value={{ userMongoData, getUseMongoData, loading }}
+    >
       {children}
     </UserMongoDataContext.Provider>
   );

@@ -40,3 +40,15 @@
 .read-the-docs {
   color: #888;
 }
+
+.profile-img {
+  height: 100px;
+  width: 100px;
+}
+
+@media (max-width: 720px) {
+  .profile-img {
+    height: 50px;
+    width: 50px;
+  }
+}
