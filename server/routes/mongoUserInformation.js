@@ -25,12 +25,12 @@ router.get("/", verifyToken, async (req, res) => {
 // Create a new user
 router.post("/", upload.single("photo"), verifyToken, async (req, res) => {
   const user = new User({
-    firstname: req.body.firstname,
-    lastname: req.body.lastname,
-    technology: req.body.technology,
-    email: req.body.email,
-    phone: req.body.phone,
-    photo: req.file.buffer ? req.file.buffer : null,
+    firstname: req?.body?.firstname,
+    lastname: req?.body?.lastname,
+    technology: req?.body?.technology,
+    email: req?.body?.email,
+    phone: req?.body?.phone,
+    photo: req?.file?.buffer ? req?.file?.buffer : null,
   });
 
   try {
@@ -56,13 +56,13 @@ router.put("/:id", upload.single("photo"), verifyToken, async (req, res) => {
         .json({ success: false, message: "User not found" });
     }
 
-    user.firstname = req.body.firstname || user.firstname;
-    user.lastname = req.body.lastname || user.lastname;
-    user.technology = req.body.technology || user.technology;
-    user.email = req.body.email || user.email;
-    user.phone = req.body.phone || user.phone;
+    user.firstname = req?.body?.firstname || user?.firstname;
+    user.lastname = req?.body?.lastname || user?.lastname;
+    user.technology = req?.body?.technology || user?.technology;
+    user.email = req?.body?.email || user?.email;
+    user.phone = req?.body?.phone || user?.phone;
     if (req.file) {
-      user.photo = req.file.buffer;
+      user.photo = req?.file?.buffer;
     }
     const updatedUser = await user.save();
     res.json({
