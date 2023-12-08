@@ -21,8 +21,8 @@ const UserInfoSchema = new mongoose.Schema({
     type: Number,
     require: true,
   },
-  photo: {
-    type: Buffer, // Use Buffer to store binary image data
+  photoUrl: {
+    type: String, // Use Buffer to store binary image data
   },
 });
 

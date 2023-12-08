@@ -92,7 +92,7 @@ export default function EmployeeTable() {
                   <td>{newdata?.email}</td>
                   <td>{newdata?.phone}</td>
                   <td>
-                    <ImageDisplay bufferData={newdata?.photo} />
+                    <ImageDisplay src={newdata?.photoUrl} />
                   </td>
                   <td>
                     <span className="action-btn">

@@ -1,12 +1,15 @@
 const express = require("express");
 const cors = require("cors");
+const path = require("path");
 const puppeteer = require("puppeteer");
 const mongoose = require("mongoose");
 const usersRouter = require("./routes/users");
 const mongoUSerRouter = require("./routes/mongoUserInformation");
-const compression = require('compression');
+const compression = require("compression");
 // const verifyToken = require("./Middleware/authentication");
 const app = express();
+
+app.use(express.static(path.join(__dirname, "public")));
 
 require("dotenv").config();
 
