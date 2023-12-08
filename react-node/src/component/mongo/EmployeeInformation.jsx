@@ -20,7 +20,7 @@ export default function EmployeeInformation(props) {
     technology: "",
     email: "",
     phone: "",
-    photo: null,
+    photoUrl: null,
   });
 
   const handleChange = (e) => {
@@ -32,7 +32,7 @@ export default function EmployeeInformation(props) {
     const file = e.target.files[0];
     setEditData({
       ...editData,
-      photo: file,
+      photoUrl: file,
     });
   };
   const updateUserData = async () => {
@@ -42,7 +42,7 @@ export default function EmployeeInformation(props) {
     formDataToSend.append("technology", editData?.technology);
     formDataToSend.append("email", editData?.email);
     formDataToSend.append("phone", editData?.phone);
-    formDataToSend.append("photo", editData?.photo);
+    formDataToSend.append("photoUrl", editData?.photoUrl);
     try {
       const response = await editMongoUser(editData?._id, formDataToSend);
       toast.success(response, {
@@ -82,7 +82,7 @@ export default function EmployeeInformation(props) {
     formDataToSend.append("technology", editData?.technology);
     formDataToSend.append("email", editData?.email);
     formDataToSend.append("phone", editData?.phone);
-    formDataToSend.append("photo", editData?.photo);
+    formDataToSend.append("photoUrl", editData?.photoUrl);
     try {
       const response = await createMongoUser(formDataToSend);
       toast.success(response, {
@@ -123,7 +123,7 @@ export default function EmployeeInformation(props) {
       technology: props.userdata?.technology,
       email: props.userdata?.email,
       phone: props.userdata?.phone,
-      photo: props.userdata?.photo,
+      photoUrl: props.userdata?.photoUrl,
     });
   }, [props.userdata]);
   return (
@@ -140,7 +140,7 @@ export default function EmployeeInformation(props) {
       </Modal.Header>
       <Modal.Body>
         <span style={{ display: "flex", justifyContent: "center" }}>
-          <ImageDisplay bufferData={editData?.photo} />
+          <ImageDisplay src={editData?.photoUrl} />
         </span>
         <Form>
           <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">

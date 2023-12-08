@@ -1,23 +1,12 @@
 /* eslint-disable react/prop-types */
-import { Buffer } from "buffer";
 
-const ImageDisplay = ({ bufferData }) => {
-  // Check if the bufferData is of the expected format (Buffer).
-  if (
-    bufferData &&
-    bufferData.type === "Buffer" &&
-    Array.isArray(bufferData.data)
-  ) {
-    // Convert the Buffer data to a base64 string.
-    const base64String = Buffer.from(bufferData.data).toString("base64");
-
-    // Create a Data URL for the image.
-    const imageUrl = `data:image/jpeg;base64,${base64String}`;
-
+const ImageDisplay = ({ src }) => {
+  if (src) {
+    const imageUrl = `http://localhost:7000/${src}`;
     return (
       <img
         src={imageUrl}
-        alt="Buffer Image"
+        alt="User Image"
         className="profile-img"
         style={{ objectFit: "contain" }}
       />
@@ -26,7 +15,7 @@ const ImageDisplay = ({ bufferData }) => {
     return (
       <img
         src="./placeholder.jpg"
-        alt="Buffer Image"
+        alt="User Image"
         height={100}
         width={100}
       />
