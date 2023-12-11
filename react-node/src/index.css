@@ -59,6 +59,10 @@ body {
   top: 50%;
 }
 
+.tech-width {
+  max-width: 300px;
+}
+
 @-webkit-keyframes rotate {
   /* 100% keyframe for  clockwise. 
      use 0% instead for anticlockwise */

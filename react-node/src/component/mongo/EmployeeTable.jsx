@@ -88,7 +88,7 @@ export default function EmployeeTable() {
                   <td>{index + 1}</td>
                   <td>{newdata?.firstname}</td>
                   <td>{newdata?.lastname}</td>
-                  <td>{newdata?.technology}</td>
+                  <td className="tech-width">{newdata?.technology}</td>
                   <td>{newdata?.email}</td>
                   <td>{newdata?.phone}</td>
                   <td>
