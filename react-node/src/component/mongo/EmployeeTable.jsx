@@ -9,6 +9,7 @@ import EmployeeInformation from "./EmployeeInformation";
 import EmployeeDeleteModal from "./EmployeeDeleteModal";
 import { useNavigate } from "react-router-dom";
 import ImageDisplay from "./ImageDisplay";
+import * as XLSX from "xlsx";
 
 export default function EmployeeTable() {
   const { userMongoData, getUseMongoData, loading } = UseMongoUserData();
@@ -35,6 +36,86 @@ export default function EmployeeTable() {
     navigate("/");
   };
 
+  const exportToExcel = async () => {
+    const excelData = userMongoData?.map((newdata, index) => ({
+      "#": index + 1,
+      "First Name": newdata?.firstname,
+      "Last Name": newdata?.lastname,
+      Technology: newdata?.technology,
+      Email: newdata?.email,
+      Phone: newdata?.phone,
+    }));
+
+    const ws = XLSX.utils.json_to_sheet(excelData);
+    const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
+    const excelBuffer = await XLSX.write(wb, {
+      bookType: "xlsx",
+      type: "array",
+    });
+
+    const blob = new Blob([excelBuffer], {
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    });
+
+    const a = document.createElement("a");
+    const dataUrl = URL.createObjectURL(blob);
+    a.href = dataUrl;
+    a.download = "EmployeeData.xlsx";
+    a.click();
+
+    URL.revokeObjectURL(dataUrl);
+  };
+  // need to work on proper downloaded file
+  // const downloadCSV = () => {
+  //   const csvData = userMongoData?.map((newdata, index) => ({
+  //     "#": index + 1,
+  //     "First Name": newdata?.firstname,
+  //     "Last Name": newdata?.lastname,
+  //     Technology: Array.isArray(newdata?.technology)
+  //       ? newdata.technology.join(", ")
+  //       : newdata?.technology,
+  //     Email: newdata?.email,
+  //     Phone: newdata?.phone,
+  //   }));
+
+  //   const headers = Object.keys(csvData[0]);
+
+  //   console.log(headers);
+
+  //   const csvContent =
+  //     headers.join(",") +
+  //     "\n" +
+  //     csvData
+  //       .map((row) =>
+  //         headers.map((newdata) =>
+  //           newdata === "Technology" ? `"${row[newdata]}"` : `"${row[newdata]}"`
+  //         )
+  //       )
+  //       .join("\n");
+
+  //   const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+  //   const link = document.createElement("a");
+
+  //   if (navigator.msSaveBlob) {
+  //     // IE 10+
+  //     navigator.msSaveBlob(blob, "export.csv");
+  //   } else {
+  //     // Other browsers
+  //     const csvUrl = URL.createObjectURL(blob);
+
+  //     link.href = csvUrl;
+  //     link.style = "visibility:hidden";
+  //     link.download = "export.csv";
+
+  //     document.body.appendChild(link);
+  //     link.click();
+  //     document.body.removeChild(link);
+
+  //     // Release the object URL
+  //     URL.revokeObjectURL(csvUrl);
+  //   }
+  // };
+
   useEffect(() => {
     const Name = JSON.parse(sessionStorage.getItem("token"));
     setEmployeeName(Name?.employee);
@@ -55,9 +136,17 @@ export default function EmployeeTable() {
         <h4>
           <b>Employee Table</b>
         </h4>
-        <Button variant="primary" onClick={() => handleShow(null)}>
-          Create
-        </Button>
+        <div>
+          <Button variant="primary" onClick={() => handleShow(null)}>
+            Create
+          </Button>
+          <Button variant="success" onClick={exportToExcel}>
+            Export to Excel
+          </Button>
+          {/* <Button variant="success" onClick={downloadCSV}>
+            Download CSV
+          </Button> */}
+        </div>
       </div>
       <div className="mobile-scroll-view">
         <Table striped bordered hover style={{ position: "relative" }}>
