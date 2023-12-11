@@ -65,7 +65,7 @@ export default function EmployeeTable() {
 
     URL.revokeObjectURL(dataUrl);
   };
-  // need to work on proper downloaded file
+  // need to work on proper formate of downloaded file
   // const downloadCSV = () => {
   //   const csvData = userMongoData?.map((newdata, index) => ({
   //     "#": index + 1,
