@@ -77,7 +77,7 @@ const Footer = ({ t }: { t: TFunction }) => {
               <Language>{t("Address")}</Language>
               <Para>Khalas Apurv</Para>
               <Para>DBZ KING</Para>
-              <Para>Apurv King</Para>
+              <Para>Apurv</Para>
             </Col>
             <Col lg={8} md={8} sm={12} xs={12}>
               <Title>{t("Company")}</Title>
