@@ -119,7 +119,7 @@ const Footer = ({ t }: { t: TFunction }) => {
           >
             <NavLink to="/">
               <LogoContainer>
-                <h3>Apurv</h3>
+                <h3>Apurv Khalas</h3>
               </LogoContainer>
             </NavLink>
             <FooterContainer>
