@@ -1,4 +1,4 @@
 {
-  "title": "Ready made sections",
-  "text": "Landy comes with a set of ready to use sections to help you easily create a landing page for your own brand, with all the content your startup desires. In order to replace any dummy elements (text, image, etc..) all you need to do is go to content folder and input your real content."
+  "title": "Why React and Express",
+  "text": "React and Express complement each other in a full-stack development environment. React takes care of the client-side, providing a dynamic and interactive user interface, while Express handles server-side logic, routing, and interaction with databases, making it a powerful combination for building modern, scalable web applications."
 }

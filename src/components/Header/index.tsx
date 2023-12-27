@@ -31,13 +31,14 @@ const Header = ({ t }: { t: TFunction }) => {
       });
       setVisibility(false);
     };
+
     return (
       <>
         <CustomNavLinkSmall onClick={() => scrollTo("about")}>
-          <Span>{t("About")}</Span>
+          <Span>{t("Firebase")}</Span>
         </CustomNavLinkSmall>
         <CustomNavLinkSmall onClick={() => scrollTo("mission")}>
-          <Span>{t("Mission")}</Span>
+          <Span>{t("MongoDB")}</Span>
         </CustomNavLinkSmall>
         <CustomNavLinkSmall onClick={() => scrollTo("product")}>
           <Span>{t("Product")}</Span>
@@ -59,7 +60,8 @@ const Header = ({ t }: { t: TFunction }) => {
       <Container>
         <Row justify="space-between">
           <LogoContainer to="/" aria-label="homepage">
-            <SvgIcon src="logo.svg" width="101px" height="64px" />
+            {/* <SvgIcon src="logo.svg" width="101px" height="64px" /> */}
+            <h3>Apurv</h3>
           </LogoContainer>
           <NotHidden>
             <MenuItem />

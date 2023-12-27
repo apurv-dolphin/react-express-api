@@ -6,12 +6,23 @@ import { useForm } from "../../common/utils/useForm";
 import validate from "../../common/utils/validationRules";
 import { Button } from "../../common/Button";
 import Block from "../Block";
-import Input from "../../common/Input";
-import TextArea from "../../common/TextArea";
 import { ContactContainer, FormGroup, Span, ButtonContainer } from "./styles";
+import { useEffect, useState } from "react";
+import styled from "styled-components";
+
+const StyledLabel = styled.label`
+  display: block;
+  padding-bottom: 10px;
+  text-transform: capitalize;
+`;
 
 const Contact = ({ title, content, id, t }: ContactProps) => {
   const { values, errors, handleChange, handleSubmit } = useForm(validate);
+  const [emailData, setEmailData] = useState({
+    name: "",
+    email: "",
+    subject: "",
+  });
 
   const ValidationType = ({ type }: ValidationTypeProps) => {
     const ErrorMessage = errors[type as keyof typeof errors];
@@ -21,6 +32,10 @@ const Contact = ({ title, content, id, t }: ContactProps) => {
       </Zoom>
     );
   };
+
+  useEffect(() => {
+    setEmailData(values);
+  }, [emailData, values]);
 
   return (
     <ContactContainer id={id}>
@@ -34,33 +49,36 @@ const Contact = ({ title, content, id, t }: ContactProps) => {
           <Slide direction="right" triggerOnce>
             <FormGroup autoComplete="off" onSubmit={handleSubmit}>
               <Col span={24}>
-                <Input
+                <StyledLabel>Name</StyledLabel>
+                <input
                   type="text"
                   name="name"
                   placeholder="Your Name"
-                  value={values.name || ""}
+                  value={emailData.name}
                   onChange={handleChange}
                 />
                 <ValidationType type="name" />
               </Col>
               <Col span={24}>
-                <Input
+                <StyledLabel>Email</StyledLabel>
+                <input
                   type="text"
                   name="email"
                   placeholder="Your Email"
-                  value={values.email || ""}
+                  value={emailData.email}
                   onChange={handleChange}
                 />
                 <ValidationType type="email" />
               </Col>
               <Col span={24}>
-                <TextArea
+                <StyledLabel>Subject</StyledLabel>
+                <textarea
                   placeholder="Your Message"
-                  value={values.message || ""}
-                  name="message"
+                  value={emailData.subject}
+                  name="subject"
                   onChange={handleChange}
                 />
-                <ValidationType type="message" />
+                <ValidationType type="subject" />
               </Col>
               <ButtonContainer>
                 <Button name="submit">{t("Submit")}</Button>
