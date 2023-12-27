@@ -3,12 +3,20 @@ const router = express.Router();
 const fs = require("fs");
 const User = require("../Modal/userModal"); // Import your Mongoose model
 const verifyToken = require("../Middleware/authentication");
+const bodyParser = require("body-parser");
+const nodemailer = require("nodemailer");
 const fileUpload = require("express-fileupload");
+require("dotenv").config();
+
+router.use(bodyParser.json());
 
 router.use(fileUpload());
 
+const username = process.env.USEREMAIL;
+const password = process.env.PASSWORD;
+
 // Get all user information
-router.get("/", verifyToken, async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const users = await User.find();
     res.json({
@@ -147,6 +155,57 @@ router.delete("/:id", verifyToken, async (req, res) => {
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }
+});
+
+router.post("/email-send", async (req, res) => {
+  const { name, email, subject } = req.body;
+  const imagePath = "./public/uploads/1701933931504_apurv.jpeg";
+  const imageContent = fs.readFileSync(imagePath);
+  // Formating content to be send
+  var emailcontent = `<h3> Contact Details</h3>
+                     <ul>
+                      <li>name: ${name}</li>
+                      <li>email : ${email}</li>
+                     </ul>
+                     <h2>Message</h2>
+                      <p>message: ${subject}</p>`;
+
+  var transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: username,
+      pass: password,
+    },
+    tls: {
+      rejectUnauthorized: false,
+    },
+  });
+
+  const attachments = [
+    {
+      filename: "1701933931504_apurv.jpeg",
+      content: imageContent,
+      encoding: "base64",
+    },
+  ];
+  // Preparing the mailOptions object
+  var mailOptions = {
+    from: username,
+    to: email,
+    subject: "New Message",
+    text: subject,
+    html: emailcontent,
+    attachments: attachments,
+  };
+  // Sending email using transporter function
+  transporter.sendMail(mailOptions, function (error, info) {
+    if (error) {
+      console.log(error);
+      res.status(500).json({ msg: "Internal Server Error", success: false });;
+    } else {
+      res.status(200).json({ msg: "Email sent successfully", success: true });
+    }
+  });
 });
 
 module.exports = router;

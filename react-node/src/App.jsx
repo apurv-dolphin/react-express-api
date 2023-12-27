@@ -9,6 +9,7 @@ const Home = lazy(() => import("./Page/Home"));
 const Mongo = lazy(() => import("./Page/Mongo"));
 const Firebase = lazy(() => import("./Page/Firebase"));
 const Authentication = lazy(() => import("./Page/Authentication"));
+const EmailTemplate = lazy(() => import("./Page/EmailTemplate"));
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path="/auth" element={<Authentication />} />
           <Route path="/firebase" element={<Firebase />} />
           <Route path="/mongo" element={<Mongo />} />
+          <Route path="/mongo/email-template" element={<EmailTemplate />} />
         </Routes>
       </Suspense>
     </BrowserRouter>

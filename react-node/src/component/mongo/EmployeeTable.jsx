@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
+import Form from "react-bootstrap/Form";
 import Table from "react-bootstrap/Table";
 import { BiEdit } from "react-icons/bi";
 import { RiDeleteBin2Fill } from "react-icons/ri";
@@ -10,6 +11,7 @@ import EmployeeDeleteModal from "./EmployeeDeleteModal";
 import { useNavigate } from "react-router-dom";
 import ImageDisplay from "./ImageDisplay";
 import * as XLSX from "xlsx";
+import sendEmailToUser from "../../service/mongo/sendEmailToUser";
 
 export default function EmployeeTable() {
   const { userMongoData, getUseMongoData, loading } = UseMongoUserData();
@@ -18,6 +20,11 @@ export default function EmployeeTable() {
   const [deleteShowModal, setDeleteShowModal] = useState(false);
   const [deleteData, setDeleteData] = useState({});
   const [editData, setEditData] = useState({});
+  const [emailData, setEmailData] = useState({
+    name: "",
+    email: "",
+    subject: "",
+  });
   const navigate = useNavigate();
 
   const handleClose = () => setShow(false);
@@ -66,55 +73,74 @@ export default function EmployeeTable() {
     URL.revokeObjectURL(dataUrl);
   };
   // need to work on proper downloaded file
-  // const downloadCSV = () => {
-  //   const csvData = userMongoData?.map((newdata, index) => ({
-  //     "#": index + 1,
-  //     "First Name": newdata?.firstname,
-  //     "Last Name": newdata?.lastname,
-  //     Technology: Array.isArray(newdata?.technology)
-  //       ? newdata.technology.join(", ")
-  //       : newdata?.technology,
-  //     Email: newdata?.email,
-  //     Phone: newdata?.phone,
-  //   }));
+  const downloadCSV = () => {
+    const csvData = userMongoData?.map((newdata, index) => ({
+      "#": index + 1,
+      "First Name": newdata?.firstname,
+      "Last Name": newdata?.lastname,
+      Technology: Array.isArray(newdata?.technology)
+        ? newdata.technology.join(", ")
+        : newdata?.technology,
+      Email: newdata?.email,
+      Phone: newdata?.phone,
+    }));
 
-  //   const headers = Object.keys(csvData[0]);
+    const headers = Object.keys(csvData[0]);
 
-  //   console.log(headers);
+    console.log(headers);
 
-  //   const csvContent =
-  //     headers.join(",") +
-  //     "\n" +
-  //     csvData
-  //       .map((row) =>
-  //         headers.map((newdata) =>
-  //           newdata === "Technology" ? `"${row[newdata]}"` : `"${row[newdata]}"`
-  //         )
-  //       )
-  //       .join("\n");
+    const csvContent =
+      headers.join(",") +
+      "\n" +
+      csvData
+        .map((row) =>
+          headers.map((newdata) =>
+            newdata === "Technology" ? `"${row[newdata]}"` : `"${row[newdata]}"`
+          )
+        )
+        .join("\n");
 
-  //   const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-  //   const link = document.createElement("a");
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
 
-  //   if (navigator.msSaveBlob) {
-  //     // IE 10+
-  //     navigator.msSaveBlob(blob, "export.csv");
-  //   } else {
-  //     // Other browsers
-  //     const csvUrl = URL.createObjectURL(blob);
+    if (navigator.msSaveBlob) {
+      // IE 10+
+      navigator.msSaveBlob(blob, "export.csv");
+    } else {
+      // Other browsers
+      const csvUrl = URL.createObjectURL(blob);
 
-  //     link.href = csvUrl;
-  //     link.style = "visibility:hidden";
-  //     link.download = "export.csv";
+      link.href = csvUrl;
+      link.style = "visibility:hidden";
+      link.download = "export.csv";
 
-  //     document.body.appendChild(link);
-  //     link.click();
-  //     document.body.removeChild(link);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
 
-  //     // Release the object URL
-  //     URL.revokeObjectURL(csvUrl);
-  //   }
-  // };
+      // Release the object URL
+      URL.revokeObjectURL(csvUrl);
+    }
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setEmailData({
+      ...emailData,
+      [name]: value,
+    });
+  };
+
+  const sendMail = async (e) => {
+    e.preventDefault();
+    console.log(emailData);
+    const response = await sendEmailToUser(
+      emailData?.name,
+      emailData?.email,
+      emailData?.subject
+    );
+    console.log(response);
+  };
 
   useEffect(() => {
     const Name = JSON.parse(sessionStorage.getItem("token"));
@@ -143,9 +169,9 @@ export default function EmployeeTable() {
           <Button variant="success" onClick={exportToExcel}>
             Export to Excel
           </Button>
-          {/* <Button variant="success" onClick={downloadCSV}>
+          <Button variant="success" onClick={downloadCSV}>
             Download CSV
-          </Button> */}
+          </Button>
         </div>
       </div>
       <div className="mobile-scroll-view">
@@ -211,6 +237,39 @@ export default function EmployeeTable() {
           userdata={deleteData}
         />
       )}
+      <Form onSubmit={sendMail}>
+        <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+          <Form.Label>Name</Form.Label>
+          <Form.Control
+            name="name"
+            type="text"
+            placeholder="enter your name"
+            value={emailData?.name || ""}
+            onChange={handleChange}
+          />
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="exampleForm.ControlInput2">
+          <Form.Label>Email address</Form.Label>u
+          <Form.Control
+            name="email"
+            type="email"
+            placeholder="name@example.com"
+            value={emailData?.email || ""}
+            onChange={handleChange}
+          />
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+          <Form.Label>Example textarea</Form.Label>
+          <Form.Control
+            name="subject"
+            as="textarea"
+            rows={3}
+            value={emailData?.subject || ""}
+            onChange={handleChange}
+          />
+        </Form.Group>
+        <Button onClick={sendMail}>submit</Button>
+      </Form>
     </>
   );
 }
