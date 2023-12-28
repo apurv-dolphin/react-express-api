@@ -7,6 +7,7 @@ export const useForm = (validate: any) => {
     name: "",
     email: "",
     subject: "",
+    attachment: null, // new field for image attachment
   });
   const [errors, setErrors] = useState({});
   const [shouldSubmit, setShouldSubmit] = useState(false);
@@ -21,37 +22,66 @@ export const useForm = (validate: any) => {
   const handleSubmit = async (event: React.ChangeEvent<HTMLFormElement>) => {
     event.preventDefault();
     setErrors(validate(values));
-    // Your url for API
+    // Your URL for API
     if (Object.values(values).every((x) => x !== "")) {
       const response = await sendEmailToUser(
         values?.name,
         values?.email,
-        values?.subject
-      );      
+        values?.subject,
+        values?.attachment
+      );
+
       if (response.msg) {
-        setValues((values) => (values = { name: "", email: "", subject: "" }));
+        setValues({
+          name: "",
+          email: "",
+          subject: "",
+          attachment: null,
+        });
         openNotificationWithIcon();
         setShouldSubmit(true);
+        setTimeout(() => {
+          setShouldSubmit(false);
+        }, 1000);
       }
     }
   };
 
   useEffect(() => {
     if (Object.keys(errors).length === 0 && shouldSubmit) {
-      setValues((values) => (values = { name: "", email: "", subject: "" }));
+      setValues({
+        name: "",
+        email: "",
+        subject: "",
+        attachment: null,
+      });
       openNotificationWithIcon();
     }
   }, [errors, shouldSubmit]);
 
   const handleChange = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    event: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLInputElement
+    >
   ) => {
     event.persist();
-    setValues((values) => ({
-      ...values,
-      [event.target.name]: event.target.value,
-    }));
-    setErrors((errors) => ({ ...errors, [event.target.name]: "" }));
+    const { name, value, type, files } = event.target;
+
+    if (type === "file") {
+      // Handle file input separately
+      const file = files && files.length ? files[0] : null;
+      setValues((prevValues) => ({
+        ...prevValues,
+        [name]: file,
+      }));
+    } else {
+      // Handle regular input fields
+      setValues((prevValues) => ({
+        ...prevValues,
+        [name]: value,
+      }));
+    }
+    setErrors((prevErrors) => ({ ...prevErrors, [name]: "" }));
   };
 
   return {
@@ -59,5 +89,6 @@ export const useForm = (validate: any) => {
     handleSubmit,
     values,
     errors,
+    shouldSubmit,
   };
 };

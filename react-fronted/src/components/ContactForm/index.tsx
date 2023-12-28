@@ -7,7 +7,7 @@ import validate from "../../common/utils/validationRules";
 import { Button } from "../../common/Button";
 import Block from "../Block";
 import { ContactContainer, FormGroup, Span, ButtonContainer } from "./styles";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
 const StyledLabel = styled.label`
@@ -17,11 +17,13 @@ const StyledLabel = styled.label`
 `;
 
 const Contact = ({ title, content, id, t }: ContactProps) => {
-  const { values, errors, handleChange, handleSubmit } = useForm(validate);
+  const { values, errors, shouldSubmit, handleChange, handleSubmit } = useForm(validate);
+  const fileInputRef = useRef(null);
   const [emailData, setEmailData] = useState({
     name: "",
     email: "",
     subject: "",
+    attachment: null,
   });
 
   const ValidationType = ({ type }: ValidationTypeProps) => {
@@ -35,6 +37,10 @@ const Contact = ({ title, content, id, t }: ContactProps) => {
 
   useEffect(() => {
     setEmailData(values);
+    if (shouldSubmit && fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [emailData, values]);
 
   return (
@@ -79,6 +85,18 @@ const Contact = ({ title, content, id, t }: ContactProps) => {
                   onChange={handleChange}
                 />
                 <ValidationType type="subject" />
+              </Col>
+              <Col span={24}>
+                <StyledLabel htmlFor="attachment">Attachment</StyledLabel>
+                <input
+                  type="file"
+                  id="attachment"
+                  name="attachment"
+                  accept="image/*"
+                  ref={fileInputRef}
+                  onChange={handleChange}
+                />
+                <ValidationType type="attachment" />
               </Col>
               <ButtonContainer>
                 <Button name="submit">{t("Submit")}</Button>
