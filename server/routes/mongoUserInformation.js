@@ -159,8 +159,7 @@ router.delete("/:id", verifyToken, async (req, res) => {
 
 router.post("/email-send", async (req, res) => {
   const { name, email, subject } = req.body;
-  const imagePath = "./public/uploads/1701933931504_apurv.jpeg";
-  const imageContent = fs.readFileSync(imagePath);
+  const { attachment } = req.files;
   // Formating content to be send
   var emailcontent = `<h3> Contact Details</h3>
                      <ul>
@@ -180,14 +179,16 @@ router.post("/email-send", async (req, res) => {
       rejectUnauthorized: false,
     },
   });
-
-  const attachments = [
-    {
-      filename: "1701933931504_apurv.jpeg",
-      content: imageContent,
+  // for multiple content
+  const attachments = [];
+  if (attachment) {
+    attachments.push({
+      filename: attachment.name, // Use the original filename
+      content: attachment.data, // Use buffer data
       encoding: "base64",
-    },
-  ];
+      mimeType: attachment.mimetype, // Use file mine type
+    });
+  }
   // Preparing the mailOptions object
   var mailOptions = {
     from: username,
@@ -201,7 +202,7 @@ router.post("/email-send", async (req, res) => {
   transporter.sendMail(mailOptions, function (error, info) {
     if (error) {
       console.log(error);
-      res.status(500).json({ msg: "Internal Server Error", success: false });;
+      res.status(500).json({ msg: "Internal Server Error", success: false });
     } else {
       res.status(200).json({ msg: "Email sent successfully", success: true });
     }
