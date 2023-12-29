@@ -34,31 +34,31 @@ router.post("/", verifyToken, async (req, res) => {
   try {
     const { firstname, lastname, technology, email, phone } = req.body;
 
-    if (!req.files || Object.keys(req.files).length === 0) {
-      return res.status(400).json({
-        success: false,
-        message: "No file uploaded",
-      });
+    // Check if a file is uploaded
+    if (req.files && req.files.photoUrl) {
+      const photo = req.files.photoUrl;
+      const photoUrl = `/uploads/${Date.now()}_${photo.name}`;
+
+      // Ensure that the 'public/uploads' directory exists
+      const uploadsDirectory = "./public/uploads";
+      if (!fs.existsSync(uploadsDirectory)) {
+        fs.mkdirSync(uploadsDirectory, { recursive: true });
+      }
+
+      await photo.mv(`./public${photoUrl}`);
     }
 
-    const photo = req.files.photoUrl;
-    const photoUrl = `/uploads/${Date.now()}_${photo.name}`;
-
-    // Ensure that the 'public/uploads' directory exists
-    const uploadsDirectory = "./public/uploads";
-    if (!fs.existsSync(uploadsDirectory)) {
-      fs.mkdirSync(uploadsDirectory, { recursive: true });
-    }
-
-    await photo.mv(`./public${photoUrl}`);
-
+    // Create a new user without the file upload information if no file is uploaded
     const newUser = new User({
       firstname,
       lastname,
       technology,
       email,
       phone,
-      photoUrl,
+      photoUrl:
+        req.files && req.files.photoUrl
+          ? `/uploads/${Date.now()}_${req.files.photoUrl.name}`
+          : null,
     });
 
     const savedUser = await newUser.save();
