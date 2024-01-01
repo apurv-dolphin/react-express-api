@@ -64,7 +64,7 @@ const Contact = ({ title, content, id, t }: ContactProps) => {
                     type="text"
                     name="name"
                     placeholder="Your Name"
-                    value={emailData.name}
+                    defaultValue={emailData.name}
                     onChange={handleChange}
                   />
                   <ValidationType type="name" />
@@ -75,7 +75,7 @@ const Contact = ({ title, content, id, t }: ContactProps) => {
                     type="text"
                     name="email"
                     placeholder="Your Email"
-                    value={emailData.email}
+                    defaultValue={emailData.email}
                     onChange={handleChange}
                   />
                   <ValidationType type="email" />
@@ -84,8 +84,8 @@ const Contact = ({ title, content, id, t }: ContactProps) => {
                   <StyledLabel>Subject</StyledLabel>
                   <textarea
                     placeholder="Your Message"
-                    value={emailData.subject}
                     name="subject"
+                    defaultValue={emailData.subject}
                     onChange={handleChange}
                   />
                   <ValidationType type="subject" />

@@ -67,7 +67,7 @@ export const useForm = (validate: any) => {
       HTMLInputElement | HTMLTextAreaElement | HTMLInputElement
     >
   ) => {
-    event.persist();
+    event.preventDefault();
     const { name, value, type, files } = event.target;
 
     if (type === "file") {
