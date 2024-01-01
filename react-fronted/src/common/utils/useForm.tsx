@@ -11,6 +11,7 @@ export const useForm = (validate: any) => {
   });
   const [errors, setErrors] = useState({});
   const [shouldSubmit, setShouldSubmit] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const openNotificationWithIcon = () => {
     notification["success"]({
@@ -21,6 +22,7 @@ export const useForm = (validate: any) => {
 
   const handleSubmit = async (event: React.ChangeEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setLoading(true);
     setErrors(validate(values));
     // Your URL for API
     if (Object.values(values).every((x) => x !== "")) {
@@ -40,6 +42,7 @@ export const useForm = (validate: any) => {
         });
         openNotificationWithIcon();
         setShouldSubmit(true);
+        setLoading(false);
         setTimeout(() => {
           setShouldSubmit(false);
         }, 1000);
@@ -90,5 +93,6 @@ export const useForm = (validate: any) => {
     values,
     errors,
     shouldSubmit,
+    loading,
   };
 };
