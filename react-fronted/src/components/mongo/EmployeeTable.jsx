@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import { useEffect, useState } from "react";
 import Table from "react-bootstrap/Table";
 import { BiEdit } from "react-icons/bi";
@@ -13,7 +12,7 @@ import Authentication from "../Authentication";
 
 export default function EmployeeTable() {
   const { userMongoData, getUseMongoData, loading } = UseMongoUserData();
-  const [employeeName, setEmployeeName] = useState("");
+  const [, setEmployeeName] = useState("");
   const [show, setShow] = useState(false);
   const [deleteShowModal, setDeleteShowModal] = useState(false);
   const [deleteData, setDeleteData] = useState({});

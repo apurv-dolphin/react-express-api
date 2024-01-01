@@ -1,9 +1,9 @@
 {
   "swagger": "2.0",
   "info": {
-    "version": "1.0.0",
-    "title": "REST API",
-    "description": ""
+    "version": "8.1.2",
+    "title": "Apurv Khalas",
+    "description": "React js"
   },
   "host": "localhost:7000",
   "basePath": "/",

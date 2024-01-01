@@ -8,6 +8,20 @@
   </head>
   <body>
     <div id="root"></div>
+    <div id="loader" class="loading">Loading&#8230;</div>
     <script type="module" src="/src/main.tsx"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        const rootElement = document.getElementById('root');
+        const loaderElement = document.getElementById('loader');
+
+        setTimeout(function () {
+          // Hide the loader
+          loaderElement.style.display = 'none';
+          // Display the content
+          rootElement.style.display = 'block';
+        }, 1000);
+      });
+    </script>
   </body>
 </html>
